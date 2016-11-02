@@ -1,0 +1,47 @@
+{
+   "name": "generator-vsts",
+   "version": "0.1.5",
+   "description": "Generates an app with CI/CD in Visual Studio Team Services",
+   "main": "./generators/app/index.js",
+   "scripts": {
+      "test": "istanbul cover --report cobertura --report lcov node_modules/mocha/bin/_mocha -- -R xunit-file"
+   },
+   "files": [
+      "generators/app",
+      "generators/asp",
+      "generators/java",
+      "generators/node",
+      "generators/vsts"
+   ],
+   "keywords": [
+      "yeoman-generator",
+      "VSTS",
+      "Team Services",
+      "Visual Studio",
+      "DevOps",
+      "RubDevOpsOnIt",
+      "Blackshirt"
+   ],
+   "author": "@DonovanBrown",
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/DarqueWarrior/generator-vsts"
+   },
+   "license": "ISC",
+   "dependencies": {
+      "async": "^2.0.1",
+      "request": "^2.74.0",
+      "yeoman-generator": "^0.24.1",
+      "yosay": "^1.2.0"
+   },
+   "devDependencies": {
+      "fs-extra": "^0.30.0",
+      "istanbul": "*",
+      "mocha": "*",
+      "proxyquire": "*",
+      "sinon": "*",
+      "supertest": "^2.0.0",
+      "xunit-file": "^1.0.0",
+      "yo": "^1.8.5"
+   }
+}

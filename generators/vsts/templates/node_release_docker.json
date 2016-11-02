@@ -1,0 +1,146 @@
+{
+   "name": "{{ReleaseDefName}}",
+   "variables": {
+      "system.debug": {
+         "value": "false"
+      }
+   },
+   "environments": [
+      {
+         "name": "Dev",
+         "rank": 1,
+         "variables": {},
+         "preDeployApprovals": {
+            "approvals": [
+               {
+                  "rank": 1,
+                  "isAutomated": true,
+                  "isNotificationOn": false
+               }
+            ]
+         },
+         "deployStep": {
+            "tasks": [
+               {
+                  "taskId": "b93c4522-5bea-4118-97ae-2b560628a157",
+                  "version": "*",
+                  "name": "Remove running containers",
+                  "enabled": true,
+                  "alwaysRun": false,
+                  "continueOnError": true,
+                  "timeoutInMinutes": 0,
+                  "definitionType": "task",
+                  "inputs": {
+                     "dockerHostEndpoint": "{{dockerHostEndpoint}}",
+                     "dockerRegistryEndpoint": "{{dockerRegistryEndpoint}}",
+                     "action": "Run a Docker command",
+                     "dockerFile": "**/Dockerfile",
+                     "imageName": "",
+                     "context": "$(Build.StagingDirectory)",
+                     "containerName": "",
+                     "ports": "",
+                     "envVars": "",
+                     "removeImageAfterPush": "false",
+                     "customCommand": "rm -f {{ProjectLowerCase}}",
+                     "containerCommand": "",
+                     "cwd": "$(System.DefaultWorkingDirectory)"
+                  }
+               },
+               {
+                  "taskId": "b93c4522-5bea-4118-97ae-2b560628a157",
+                  "version": "*",
+                  "name": "Run image",
+                  "enabled": true,
+                  "alwaysRun": false,
+                  "continueOnError": false,
+                  "timeoutInMinutes": 0,
+                  "definitionType": "task",
+                  "inputs": {
+                     "dockerHostEndpoint": "{{dockerHostEndpoint}}",
+                     "dockerRegistryEndpoint": "{{dockerRegistryEndpoint}}",
+                     "action": "Run an image",
+                     "dockerFile": "**/Dockerfile",
+                     "imageName": "{{dockerRegistryId}}/{{ProjectLowerCase}}:$(Build.BuildId)",
+                     "context": "$(Build.StagingDirectory)",
+                     "containerName": "{{ProjectLowerCase}}",
+                     "ports": "3000:3000",
+                     "envVars": "",
+                     "removeImageAfterPush": "false",
+                     "customCommand": "",
+                     "containerCommand": "",
+                     "cwd": "$(System.DefaultWorkingDirectory)"
+                  }
+               }
+            ]
+         },
+         "postDeployApprovals": {
+            "approvals": [
+               {
+                  "rank": 1,
+                  "isAutomated": true,
+                  "isNotificationOn": false
+               }
+            ]
+         },
+         "queueId": "{{QueueId}}",
+         "runOptions": {
+            "EnvironmentOwnerEmailNotificationType": "OnlyOnFailure",
+            "skipArtifactsDownload": "True",
+            "TimeoutInMinutes": "0"
+         },
+         "environmentOptions": {
+            "emailNotificationType": "OnlyOnFailure",
+            "emailRecipients": "release.environment.owner;release.creator",
+            "skipArtifactsDownload": true,
+            "timeoutInMinutes": 0,
+            "enableAccessToken": false
+         },
+         "demands": [],
+         "conditions": [
+            {
+               "name": "ReleaseStarted",
+               "conditionType": "event",
+               "value": ""
+            }
+         ],
+         "executionPolicy": {
+            "concurrencyCount": 0,
+            "queueDepthCount": 0
+         },
+         "schedules": [],
+         "retentionPolicy": {
+            "daysToKeep": 60,
+            "releasesToKeep": 3,
+            "retainBuild": false
+         }
+      }
+   ],
+   "artifacts": [
+      {
+         "sourceId": "{{ProjectId}}:{{BuildId}}",
+         "type": "Build",
+         "alias": "{{BuildName}}",
+         "definitionReference": {
+            "definition": {
+               "id": "{{BuildId}}",
+               "name": "{{BuildName}}"
+            },
+            "project": {
+               "id": "{{ProjectId}}",
+               "name": "{{ProjectName}}"
+            }
+         },
+         "isPrimary": true
+      }
+   ],
+   "triggers": [
+      {
+         "artifactAlias": "{{BuildName}}",
+         "triggerType": 1
+      }
+   ],
+   "releaseNameFormat": "",
+   "retentionPolicy": {
+      "daysToKeep": 60
+   }
+}

@@ -1,0 +1,6 @@
+**/node_modules/
+temp/
+*.lck
+/coverage
+xunit.xml
+javac*.log

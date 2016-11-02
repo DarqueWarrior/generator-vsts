@@ -1,0 +1,24 @@
+{
+   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+   "contentVersion": "1.0.0.0",
+   "parameters": {
+      "name": {
+         "value": "pythonDemoDev"
+      },
+      "hostingPlanName": {
+         "value": "Default1"
+      },
+      "hostingEnvironment": {
+         "value": ""
+      },
+      "location": {
+         "value": "South Central US"
+      },
+      "serverFarmResourceGroup": {
+         "value": "Default-Web-SouthCentralUS"
+      },
+      "subscriptionId": {
+         "value": "121d7d3b-2911-4154-9aa8-65132fe82e74"
+      }
+   }
+}
