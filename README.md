@@ -1,5 +1,8 @@
 # generator-vsts
 
+## See it in action
+[Ignite New Zealand 2016](https://channel9.msdn.com/Events/Ignite/New-Zealand-2016/M328)
+
 ## Capabilities
 generator-vsts is a [Yeoman](http://yeoman.io/) generator that creates a complete CI/CD pipeline in [Visual Studio Team Services](https://www.visualstudio.com/vsts-test/) for the following languages:
 - Java using Tiles and bootstrap
