@@ -10,7 +10,7 @@ function construct() {
    // Order is important 
    this.argument('type', { type: String, required: false, desc: 'the project type to create' });
    this.argument('applicationName', { type: String, required: false, desc: 'the name of the application' });
-   this.argument('vsts', { type: String, required: false, desc: 'the vsts account' });
+   this.argument('vsts', { type: String, required: false, desc: 'the vsts account not the full url. Your vsts account is the part before the .visualstudio.com' });
    this.argument('pat', { type: String, required: false, desc: 'the vsts Personal Access Token' });
    this.argument('azureSub', { type: String, required: false, desc: 'the Azure Subscription name' });
    this.argument('queue', { type: String, required: false, desc: 'the agent queue name to use' });

@@ -1,5 +1,6 @@
 // This is the main entry point of the generator.  The heavy lifting is done in the
 // sub generator vsts.  I separated them so I could compose with language generators.
+const url = require('url');
 const yosay = require('yosay');
 const generators = require('yeoman-generator');
 
@@ -15,7 +16,7 @@ function construct() {
    // via the command line they will be queried during the prompting priority
    this.argument('type', { type: String, required: false, desc: 'the project type to create (asp, node or java)' });
    this.argument('applicationName', { type: String, required: false, desc: 'the name of the application' });
-   this.argument('vsts', { type: String, required: false, desc: 'the vsts account ({account}.visualstudio.com)' });
+   this.argument('vsts', { type: String, required: false, desc: 'the vsts account not the full url. Your vsts account is the part before the .visualstudio.com' });
    this.argument('pat', { type: String, required: false, desc: 'the vsts Personal Access Token' });
    this.argument('azureSub', { type: String, required: false, desc: 'the Azure Subscription name' });
    this.argument('queue', { type: String, required: false, desc: 'the agent queue name to use' });
@@ -114,6 +115,19 @@ function input() {
          name: 'vsts',
          store: true,
          message: "What's your Team Services account name ({account}.visualstudio.com)?",
+         validate: function(input) {
+            // It was unclear if the user should provide the full URL or just 
+            // the account name so I am adding validation to help.
+
+            // If you find http or visualstudio.com in the name the user most
+            // likely entered the entire URL instead of just the account name
+            // so let them know.  Otherwise, just return true.
+            if(input.toLowerCase().match(/visualstudio.com|http/) === null) {
+               return true;
+            }
+            
+            return "Only provide your account name ({account}.visualstudio.com) not the entire URL. Just the portion before .visualstudio.com.";
+         },
          when: function () {
             return templateData.answers.vsts === undefined;
          }
