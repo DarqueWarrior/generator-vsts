@@ -296,7 +296,7 @@
          "apiVersion": "2014-04-01",
          "name": "[parameters('webSiteName')]",
          "type": "Microsoft.Insights/components",
-         "location": "Central US",
+         "location": "South Central US",
          "dependsOn": [
             "[concat('Microsoft.Web/sites/', parameters('webSiteName'))]"
          ],
