@@ -7,6 +7,9 @@
       },
       "webSiteName": {
          "value": null
+      },
+      "aiLocation": {
+         "value": null
       }
    }
 }
