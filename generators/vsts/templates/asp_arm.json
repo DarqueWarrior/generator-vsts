@@ -19,6 +19,11 @@
             "West Europe"
          ]
       },
+      "websiteNodeVersion": {
+         "type": "string",
+         "minLength": 1,
+         "defaultValue": "6.9.1"
+      },
       "skuName": {
          "type": "string",
          "defaultValue": "F1",
@@ -94,7 +99,8 @@
                     "displayName": "appSettings"
                 },
                 "properties": {
-                    "MSDEPLOY_RENAME_LOCKED_FILES": "1"
+                    "WEBSITE_NODE_DEFAULT_VERSION": "[parameters('websiteNodeVersion')]",
+                    "MSDEPLOY_RENAME_LOCKED_FILES": "1",
                 }
             }
         ]
