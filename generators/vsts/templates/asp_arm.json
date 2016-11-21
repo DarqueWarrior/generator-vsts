@@ -19,6 +19,11 @@
             "West Europe"
          ]
       },
+      "websiteNodeVersion": {
+         "type": "string",
+         "minLength": 1,
+         "defaultValue": "6.9.1"
+      },
       "skuName": {
          "type": "string",
          "defaultValue": "F1",
@@ -81,7 +86,24 @@
          "properties": {
             "name": "[parameters('webSiteName')]",
             "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
-         }
+         },
+        "resources": [
+            {
+                "name": "appsettings",
+                "type": "config",
+                "apiVersion": "2015-08-01",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]"
+                ],
+                "tags": {
+                    "displayName": "appSettings"
+                },
+                "properties": {
+                    "WEBSITE_NODE_DEFAULT_VERSION": "[parameters('websiteNodeVersion')]",
+                    "MSDEPLOY_RENAME_LOCKED_FILES": "1",
+                }
+            }
+        ]
       },
       {
          "apiVersion": "2014-04-01",
