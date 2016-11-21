@@ -100,7 +100,7 @@
                 },
                 "properties": {
                     "WEBSITE_NODE_DEFAULT_VERSION": "[parameters('websiteNodeVersion')]",
-                    "MSDEPLOY_RENAME_LOCKED_FILES": "1",
+                    "MSDEPLOY_RENAME_LOCKED_FILES": "1"
                 }
             }
         ]
