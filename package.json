@@ -1,6 +1,6 @@
 {
    "name": "generator-vsts",
-   "version": "0.2.0",
+   "version": "0.2.1",
    "description": "Generates an app with CI/CD in Visual Studio Team Services",
    "main": "./generators/app/index.js",
    "scripts": {
