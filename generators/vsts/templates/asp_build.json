@@ -172,7 +172,7 @@
          "enabled": true,
          "continueOnError": false,
          "alwaysRun": false,
-         "displayName": "Copy parameters.xml to publish folder",
+         "displayName": "Copy parameters.xml and json files to publish folder",
          "timeoutInMinutes": 0,
          "task": {
             "id": "5bfb729a-a7c8-4a78-a7c3-8d717bb7c13c",
@@ -181,8 +181,8 @@
          },
          "inputs": {
             "SourceFolder": "templates/",
-            "Contents": "**/parameters.xml",
-            "TargetFolder": "$(Build.StagingDirectory)/pub",
+            "Contents": "**/*.*",
+            "TargetFolder": "$(Build.StagingDirectory)/pub/templates/",
             "CleanTargetFolder": "false",
             "OverWrite": "false"
          }
