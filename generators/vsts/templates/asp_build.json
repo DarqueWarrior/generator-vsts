@@ -28,18 +28,33 @@
          "enabled": true,
          "continueOnError": false,
          "alwaysRun": false,
-         "displayName": "Run dotnet restore",
+         "displayName": "Restore",
          "timeoutInMinutes": 0,
          "task": {
-            "id": "d9bafed4-0b18-4f58-968d-86655b4d2ce9",
+            "id": "5541a522-603c-47ad-91fc-a4b1d163081b",
             "versionSpec": "*",
             "definitionType": "task"
          },
          "inputs": {
-            "filename": "dotnet",
-            "arguments": "restore --no-cache",
-            "workingFolder": "",
-            "failOnStandardError": "false"
+            "command": "restore",
+            "projects": "**/project.json"
+         }
+      },
+      {
+         "enabled": true,
+         "continueOnError": false,
+         "alwaysRun": false,
+         "displayName": "Build",
+         "timeoutInMinutes": 0,
+         "task": {
+            "id": "5541a522-603c-47ad-91fc-a4b1d163081b",
+            "versionSpec": "*",
+            "definitionType": "task"
+         },
+         "inputs": {
+            "command": "build",
+            "projects": "**/project.json",
+            "arguments": "--configuration $(BuildConfiguration)"
          }
       },
       {
@@ -139,18 +154,18 @@
          "enabled": true,
          "continueOnError": false,
          "alwaysRun": false,
-         "displayName": "Run dotnet publish",
+         "displayName": "Publish",
          "timeoutInMinutes": 0,
          "task": {
-            "id": "d9bafed4-0b18-4f58-968d-86655b4d2ce9",
+            "id": "5541a522-603c-47ad-91fc-a4b1d163081b",
             "versionSpec": "*",
             "definitionType": "task"
          },
          "inputs": {
-            "filename": "dotnet",
-            "arguments": "publish -c $(BuildConfiguration) -o $(Build.StagingDirectory)/pub",
-            "workingFolder": "src/{{Project}}",
-            "failOnStandardError": "false"
+            "command": "publish",
+            "publishWebProjects": "True",
+            "zipAfterPublish": "True",
+            "arguments": "--configuration $(BuildConfiguration) --output $(Build.StagingDirectory)/pub"
          }
       },
       {
@@ -170,26 +185,6 @@
             "TargetFolder": "$(Build.StagingDirectory)/pub",
             "CleanTargetFolder": "false",
             "OverWrite": "false"
-         }
-      },
-      {
-         "enabled": true,
-         "continueOnError": false,
-         "alwaysRun": false,
-         "displayName": "Archive files ",
-         "timeoutInMinutes": 0,
-         "task": {
-            "id": "d8b84976-e99a-4b86-b885-4849694435b0",
-            "versionSpec": "*",
-            "definitionType": "task"
-         },
-         "inputs": {
-            "rootFolder": "$(Build.StagingDirectory)/pub",
-            "includeRootFolder": "false",
-            "archiveType": "default",
-            "tarCompression": "gz",
-            "archiveFile": "website.zip",
-            "replaceExistingArchive": "true"
          }
       },
       {
