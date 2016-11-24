@@ -37,24 +37,10 @@
          },
          "inputs": {
             "command": "restore",
-            "projects": "**/project.json"
-         }
-      },
-      {
-         "enabled": true,
-         "continueOnError": false,
-         "alwaysRun": false,
-         "displayName": "Build",
-         "timeoutInMinutes": 0,
-         "task": {
-            "id": "5541a522-603c-47ad-91fc-a4b1d163081b",
-            "versionSpec": "*",
-            "definitionType": "task"
-         },
-         "inputs": {
-            "command": "build",
+            "publishWebProjects": "true",
             "projects": "**/project.json",
-            "arguments": "--configuration $(BuildConfiguration)"
+            "arguments": "--no-cache",
+            "zipAfterPublish": "true"
          }
       },
       {
@@ -163,9 +149,10 @@
          },
          "inputs": {
             "command": "publish",
-            "publishWebProjects": "True",
-            "zipAfterPublish": "True",
-            "arguments": "--configuration $(BuildConfiguration) --output $(Build.StagingDirectory)/pub"
+            "publishWebProjects": "true",
+            "projects": "",
+            "arguments": "--configuration $(BuildConfiguration) --output $(Build.StagingDirectory)/pub",
+            "zipAfterPublish": "true"
          }
       },
       {
@@ -199,11 +186,34 @@
             "definitionType": "task"
          },
          "inputs": {
-            "CopyRoot": "",
+            "CopyRoot": "$(Build.StagingDirectory)/pub",
             "Contents": "**/*.zip\n**/templates/*.*",
             "ArtifactName": "drop",
             "ArtifactType": "Container",
             "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)"
+         }
+      }
+   ],
+   "options": [
+      {
+         "enabled": false,
+         "definition": {
+            "id": "7c555368-ca64-4199-add6-9ebaf0b0137d"
+         },
+         "inputs": {
+            "multipliers": "[]",
+            "parallel": "false",
+            "continueOnError": "true",
+            "additionalFields": "{}"
+         }
+      },
+      {
+         "enabled": false,
+         "definition": {
+            "id": "57578776-4c22-4526-aeb0-86b6da17ee9c"
+         },
+         "inputs": {
+            "additionalFields": "{}"
          }
       }
    ],
@@ -243,7 +253,11 @@
    "repository": {
       "properties": {
          "labelSources": "0",
-         "reportBuildStatus": "true"
+         "reportBuildStatus": "true",
+         "fetchDepth": "0",
+         "gitLfsSupport": "false",
+         "skipSyncSource": "false",
+         "cleanOptions": "0"
       },
       "type": "TfsGit",
       "name": "{{Project}}",
