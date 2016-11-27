@@ -19,6 +19,7 @@ It allows you to deploy to the following platforms:
 ## Requirements
 - [Visual Studio Team Services Account](https://app.vsaex.visualstudio.com/profile/account)
    - Personal Access Token
+   - Install [Docker Integration](https://marketplace.visualstudio.com/items?itemName=ms-vscs-rm.docker) on VSTS Account
 - [Azure Subscription](https://azure.microsoft.com/en-us/free/)
 
 ## Install
