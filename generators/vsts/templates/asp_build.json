@@ -28,18 +28,19 @@
          "enabled": true,
          "continueOnError": false,
          "alwaysRun": false,
-         "displayName": "Run dotnet restore",
+         "displayName": "Restore",
          "timeoutInMinutes": 0,
          "task": {
-            "id": "d9bafed4-0b18-4f58-968d-86655b4d2ce9",
+            "id": "5541a522-603c-47ad-91fc-a4b1d163081b",
             "versionSpec": "*",
             "definitionType": "task"
          },
          "inputs": {
-            "filename": "dotnet",
-            "arguments": "restore --no-cache",
-            "workingFolder": "",
-            "failOnStandardError": "false"
+            "command": "restore",
+            "publishWebProjects": "true",
+            "projects": "**/project.json",
+            "arguments": "--no-cache",
+            "zipAfterPublish": "true"
          }
       },
       {
@@ -139,25 +140,26 @@
          "enabled": true,
          "continueOnError": false,
          "alwaysRun": false,
-         "displayName": "Run dotnet publish",
+         "displayName": "Publish",
          "timeoutInMinutes": 0,
          "task": {
-            "id": "d9bafed4-0b18-4f58-968d-86655b4d2ce9",
+            "id": "5541a522-603c-47ad-91fc-a4b1d163081b",
             "versionSpec": "*",
             "definitionType": "task"
          },
          "inputs": {
-            "filename": "dotnet",
-            "arguments": "publish -c $(BuildConfiguration) -o $(Build.StagingDirectory)/pub",
-            "workingFolder": "src/{{Project}}",
-            "failOnStandardError": "false"
+            "command": "publish",
+            "publishWebProjects": "true",
+            "projects": "",
+            "arguments": "--configuration $(BuildConfiguration) --output $(Build.StagingDirectory)/pub",
+            "zipAfterPublish": "true"
          }
       },
       {
          "enabled": true,
          "continueOnError": false,
          "alwaysRun": false,
-         "displayName": "Copy parameters.xml to publish folder",
+         "displayName": "Copy ARM template files to publish folder",
          "timeoutInMinutes": 0,
          "task": {
             "id": "5bfb729a-a7c8-4a78-a7c3-8d717bb7c13c",
@@ -166,30 +168,10 @@
          },
          "inputs": {
             "SourceFolder": "templates/",
-            "Contents": "**/parameters.xml",
-            "TargetFolder": "$(Build.StagingDirectory)/pub",
+            "Contents": "**/*.json",
+            "TargetFolder": "$(Build.StagingDirectory)/pub/templates/",
             "CleanTargetFolder": "false",
-            "OverWrite": "false"
-         }
-      },
-      {
-         "enabled": true,
-         "continueOnError": false,
-         "alwaysRun": false,
-         "displayName": "Archive files ",
-         "timeoutInMinutes": 0,
-         "task": {
-            "id": "d8b84976-e99a-4b86-b885-4849694435b0",
-            "versionSpec": "*",
-            "definitionType": "task"
-         },
-         "inputs": {
-            "rootFolder": "$(Build.StagingDirectory)/pub",
-            "includeRootFolder": "false",
-            "archiveType": "default",
-            "tarCompression": "gz",
-            "archiveFile": "website.zip",
-            "replaceExistingArchive": "true"
+            "OverWrite": "true"
          }
       },
       {
@@ -204,11 +186,34 @@
             "definitionType": "task"
          },
          "inputs": {
-            "CopyRoot": "",
+            "CopyRoot": "$(Build.StagingDirectory)/pub",
             "Contents": "**/*.zip\n**/templates/*.*",
             "ArtifactName": "drop",
             "ArtifactType": "Container",
             "TargetPath": "\\\\my\\share\\$(Build.DefinitionName)\\$(Build.BuildNumber)"
+         }
+      }
+   ],
+   "options": [
+      {
+         "enabled": false,
+         "definition": {
+            "id": "7c555368-ca64-4199-add6-9ebaf0b0137d"
+         },
+         "inputs": {
+            "multipliers": "[]",
+            "parallel": "false",
+            "continueOnError": "true",
+            "additionalFields": "{}"
+         }
+      },
+      {
+         "enabled": false,
+         "definition": {
+            "id": "57578776-4c22-4526-aeb0-86b6da17ee9c"
+         },
+         "inputs": {
+            "additionalFields": "{}"
          }
       }
    ],
@@ -248,7 +253,11 @@
    "repository": {
       "properties": {
          "labelSources": "0",
-         "reportBuildStatus": "true"
+         "reportBuildStatus": "true",
+         "fetchDepth": "0",
+         "gitLfsSupport": "false",
+         "skipSyncSource": "false",
+         "cleanOptions": "0"
       },
       "type": "TfsGit",
       "name": "{{Project}}",
