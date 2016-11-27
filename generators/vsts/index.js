@@ -113,7 +113,6 @@ function writeFiles() {
    if (this.type === 'asp') {
       this.copy(this.sourceRoot() + '/asp_arm.json', this.applicationName + '/templates/website.json');
       this.copy(this.sourceRoot() + '/arm.parameters.json', this.applicationName + '/templates/website.parameters.json');
-      this.copy(this.sourceRoot() + '/parameters.xml', this.applicationName + '/templates/parameters.xml');
    } else if (this.type === 'node') {
       this.copy(this.sourceRoot() + '/node_arm.json', this.applicationName + '/templates/website.json');
       this.copy(this.sourceRoot() + '/arm.parameters.json', this.applicationName + '/templates/website.parameters.json');
