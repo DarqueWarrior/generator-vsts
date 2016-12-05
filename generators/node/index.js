@@ -62,7 +62,6 @@ function writeFiles() {
    root = `${this.applicationName}/test`;
 
    this.copy(`${src}/unitTest.js`, `${root}/unitTest.js`);
-   this.fs.copyTpl(`${src}/uiTest.js`, `${root}/uiTest.js`, tokens);
 }
 
 function install() {
