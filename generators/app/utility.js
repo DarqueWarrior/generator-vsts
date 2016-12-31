@@ -6,6 +6,10 @@ const RELEASE_API_VERSION = `3.0-preview.3`;
 const DISTRIBUTED_TASK_API_VERSION = `3.0-preview.1`;
 const SERVICE_ENDPOINTS_API_VERSION = `3.0-preview.1`;
 
+function reconcileValue(first, second, fallback) {
+   return first ? first : (second ? second : fallback);
+}
+
 function encodePat(pat) {
    'use strict';
 
@@ -22,13 +26,48 @@ function validateRequired(input, msg) {
    return !input ? msg : true;
 }
 
+function validateAzureSub(input) {
+   return validateRequired(input, `You must provide an Azure Subscription Name`);
+}
+
 function validatePersonalAccessToken(input) {
    return validateRequired(input, `You must provide a Personal Access Token`);
+}
+
+function validateApplicationName(input) {
+   return validateRequired(input, `You must provide a name for your application`);
+}
+
+function validateDockerHost(input) {
+   return validateRequired(input, `You must provide a Docker Host URL`);
+}
+
+function validateDockerCertificatePath(input) {
+   return validateRequired(input, `You must provide a Docker Certificate Path`);
+}
+
+function validatePortMapping(input) {
+   return validateRequired(input, `You must provide a Port Mapping`);
+}
+
+function validateDockerHubID(input) {
+   return validateRequired(input, `You must provide a Docker Hub ID`);
+}
+
+function validateDockerHubPassword(input) {
+   return validateRequired(input, `You must provide a Docker Hub Password`);
+}
+
+function validateDockerHubEmail(input) {
+   return validateRequired(input, `You must provide a Docker Hub Email`);
 }
 
 function validateVSTS(input) {
    // It was unclear if the user should provide the full URL or just 
    // the account name so I am adding validation to help.
+   if (!input) {
+      return `You must provide a Team Services account name`;
+   }
 
    // If you find http or visualstudio.com in the name the user most
    // likely entered the entire URL instead of just the account name
@@ -45,10 +84,10 @@ function getFullURL(instance) {
    // it is used with TFS they give the full url including the collection. This
    // functions makes sure any code needing the full URL gets that they need to
    // continue without worrying if it is TFS or VSTS.
-   if (input.toLowerCase().match(/http/) === null) {
+   if (instance.toLowerCase().match(/http/) !== null) {
       return instance;
    }
-   
+
    return `https://${instance}.visualstudio.com/`;
 }
 
@@ -85,5 +124,8 @@ module.exports = {
    // it.
    getPools: getPools,
    validateVSTS: validateVSTS,
+   reconcileValue: reconcileValue,
+   validateAzureSub: validateAzureSub,
+   validateApplicationName: validateApplicationName,
    validatePersonalAccessToken: validatePersonalAccessToken
 }

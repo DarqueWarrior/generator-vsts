@@ -6,7 +6,7 @@ const util = require(`./utility`);
 const generators = require('yeoman-generator');
 
 // Carry the arguments
-var templateData = {};
+var cmdLnInput = {};
 
 function construct() {
    // Calling the super constructor is important so our generator is correctly set up
@@ -37,7 +37,7 @@ function construct() {
 // prompt for.
 function init() {
    this.log(yosay('Welcome to DevOps powered by Team Services'));
-   templateData.answers = {
+   cmdLnInput = {
       pat: this.pat,
       type: this.type,
       instance: this.instance,
@@ -65,7 +65,7 @@ function input() {
       message: "What's your Team Services account name ({account}.visualstudio.com)?",
       validate: util.validateVSTS,
       when: function () {
-         return templateData.answers.vsts === undefined;
+         return cmdLnInput.vsts === undefined;
       }
    }, {
       type: 'password',
@@ -74,7 +74,7 @@ function input() {
       message: "What's your Team Services Personal Access Token?",
       validate: util.validatePersonalAccessToken,
       when: function () {
-         return templateData.answers.pat === undefined;
+         return cmdLnInput.pat === undefined;
       }
    }, {
       type: `list`,
@@ -84,14 +84,13 @@ function input() {
       default: `Hosted`,
       choices: util.getPools,
       when: function () {
-         return templateData.answers.queue === undefined;
+         return cmdLnInput.queue === undefined;
       }
    }, {
       type: 'list',
       name: 'type',
       store: true,
       message: 'What type of application do you want to create?',
-      default: templateData.answers.type,
       choices: [
          {
             name: 'ASP.NET',
@@ -107,17 +106,16 @@ function input() {
          },
       ],
       when: function () {
-         return templateData.answers.type === undefined;
+         return cmdLnInput.type === undefined;
       }
-   },
-   {
+   }, {
       type: 'input',
       name: 'applicationName',
       store: true,
       message: "What's the name of your ASP.NET application?",
-      default: templateData.answers.applicationName,
+      validate: util.validateApplicationName,
       when: function () {
-         return templateData.answers.applicationName === undefined;
+         return cmdLnInput.applicationName === undefined;
       }
    },
    {
@@ -125,7 +123,6 @@ function input() {
       name: 'target',
       store: true,
       message: "Where would you like to deploy?",
-      default: templateData.answers.target,
       choices: [
          {
             name: 'Azure App Service',
@@ -137,78 +134,83 @@ function input() {
          }
       ],
       when: function () {
-         return templateData.answers.target === undefined;
+         return cmdLnInput.target === undefined;
       }
-   },
-
-
-
-   {
-      type: 'input',
-      name: 'azureSub',
+   }, {
+      type: `input`,
+      name: `azureSub`,
       store: true,
-      message: "What's your Azure subscription name?",
-      when: function () {
-         return templateData.answers.azureSub === undefined;
+      message: `What is your Azure subscription name?`,
+      validate: util.validateAzureSub,
+      when: function (a) {
+         return (a.target === `paas` || cmdLnInput.target === `paas`) && cmdLnInput.azureSub === undefined;
       }
-   },
-   {
-      type: 'input',
-      name: 'dockerHost',
+   }, {
+      type: `input`,
+      name: `dockerHost`,
       store: true,
-      message: "What's your Docker host url and port (tcp://host:2376)?",
+      message: `What is your Docker host url and port (tcp://host:2376)?`,
+      validate: util.validateDockerHost,
       when: function (answers) {
          // If you pass in the target on the command line 
-         // answers.target will be undefined so test templateData
-         return (answers.target === 'docker' || templateData.answers.target === 'docker') && templateData.answers.dockerHost === undefined;
+         // answers.target will be undefined so test cmdLnInput
+         return (answers.target === `docker` || cmdLnInput.target === `docker`) && cmdLnInput.dockerHost === undefined;
       }
-   },
-   {
-      type: 'input',
-      name: 'dockerCertPath',
+   }, {
+      type: `input`,
+      name: `dockerCertPath`,
       store: true,
-      message: "What's your Docker certificate path?",
+      message: `What is your Docker Certificate Path?`,
+      validate: util.validateDockerCertificatePath,
       when: function (answers) {
-         return (answers.target === 'docker' || templateData.answers.target === 'docker') && templateData.answers.dockerCertPath === undefined;
+         return (answers.target === `docker` || cmdLnInput.target === `docker`) && cmdLnInput.dockerCertPath === undefined;
       }
-   },
-   {
-      type: 'input',
-      name: 'dockerRegistryId',
+   }, {
+      type: `input`,
+      name: `dockerRegistryId`,
       store: true,
-      message: "What's your Docker Hub ID (case sensitive)?",
+      message: `What is your Docker Hub ID (case sensitive)?`,
+      validate: util.validateDockerHubID,
       when: function (answers) {
-         return (answers.target === 'docker' || templateData.answers.target === 'docker') && templateData.answers.dockerRegistryId === undefined;
+         return (answers.target === `docker` || cmdLnInput.target === `docker`) && cmdLnInput.dockerRegistryId === undefined;
       }
-   },
-   {
-      type: 'password',
-      name: 'dockerRegistryPassword',
+   }, {
+      type: `password`,
+      name: `dockerRegistryPassword`,
       store: false,
-      message: "What's your Docker Hub password?",
+      message: `What is your Docker Hub password?`,
+      validate: util.validateDockerHubPassword,
       when: function (answers) {
-         return (answers.target === 'docker' || templateData.answers.target === 'docker') && templateData.answers.dockerRegistryPassword === undefined;
+         return (answers.target === `docker` || cmdLnInput.target === `docker`) && cmdLnInput.dockerRegistryPassword === undefined;
       }
-   },
-   {
-      type: 'input',
-      name: 'dockerRegistryEmail',
+   }, {
+      type: `input`,
+      name: `dockerRegistryEmail`,
       store: true,
-      message: "What's your Docker Hub email?",
+      message: `What is your Docker Hub email?`,
+      validate: util.validateDockerHubEmail,
       when: function (answers) {
-         return (answers.target === 'docker' || templateData.answers.target === 'docker') && templateData.answers.dockerRegistryEmail === undefined;
+         return (answers.target === `docker` || cmdLnInput.target === `docker`) && cmdLnInput.dockerRegistryEmail === undefined;
       }
-   },
-   {
-      type: 'input',
-      name: 'groupId',
+   }, {
+      type: `input`,
+      name: `dockerPorts`,
+      default: util.getDefaultPortMapping,
+      message: `What should the port mapping be?`,
+      validate: util.validatePortMapping,
+      when: function (answers) {
+         return (answers.target === `docker` || cmdLnInput.target === `docker`) && cmdLnInput.dockerPorts === undefined;
+      }
+   }, {
+      type: `input`,
+      name: `groupId`,
       store: true,
-      message: "What's your Group ID?",
+      message: "What is your Group ID?",
+      validate: util.validateGroupID,
       when: function (answers) {
-         return answers.type === 'java' && templateData.answers.groupId === undefined;
+         return answers.type === `java` && cmdLnInput.groupId === undefined;
       }
-   },
-   {
+   }, {
       type: 'list',
       name: 'installDep',
       store: true,
@@ -225,41 +227,42 @@ function input() {
          }
       ],
       when: function () {
-         return templateData.answers.installDep === undefined;
+         return cmdLnInput.installDep === undefined;
       }
-   }]).then(function (answers) {
+   }]).then(function (a) {
       // Transfer answers to global object for use in the rest of the generator
-      templateData.answers.pat = answers.pat ? answers.pat : templateData.answers.pat;
-      templateData.answers.type = answers.type ? answers.type : templateData.answers.type;
-      templateData.answers.queue = answers.queue ? answers.queue : templateData.answers.queue;
-      templateData.answers.target = answers.target ? answers.target : templateData.answers.target;
-      templateData.answers.groupId = answers.groupId ? answers.groupId : templateData.answers.groupId;
-      templateData.answers.instance = answers.instance ? answers.instance : templateData.answers.instance;
-      templateData.answers.azureSub = answers.azureSub ? answers.azureSub : templateData.answers.azureSub;
-      templateData.answers.installDep = answers.installDep ? answers.installDep : templateData.answers.installDep;
-      templateData.answers.dockerHost = answers.dockerHost ? answers.dockerHost : templateData.answers.dockerHost;
-      templateData.answers.dockerCertPath = answers.dockerCertPath ? answers.dockerCertPath : templateData.answers.dockerCertPath;
-      templateData.answers.applicationName = answers.applicationName ? answers.applicationName : templateData.answers.applicationName;
-      templateData.answers.dockerRegistryId = answers.dockerRegistryId ? answers.dockerRegistryId : templateData.answers.dockerRegistryId;
-      templateData.answers.dockerRegistryEmail = answers.dockerRegistryEmail ? answers.dockerRegistryEmail : templateData.answers.dockerRegistryEmail;
-      templateData.answers.dockerRegistryPassword = answers.dockerRegistryPassword ? answers.dockerRegistryPassword : templateData.answers.dockerRegistryPassword;
+      this.pat = util.reconcileValue(a.pat, cmdLnInput.pat);
+      this.type = util.reconcileValue(a.type, cmdLnInput.type);
+      this.queue = util.reconcileValue(a.queue, cmdLnInput.queue);
+      this.target = util.reconcileValue(a.target, cmdLnInput.target);
+      this.instance = util.reconcileValue(a.instance, cmdLnInput.instance);
+      this.groupId = util.reconcileValue(a.groupId, cmdLnInput.groupId, ``);
+      this.azureSub = util.reconcileValue(a.azureSub, cmdLnInput.azureSub, ``);
+      this.installDep = util.reconcileValue(a.installDep, cmdLnInput.installDep);
+      this.dockerHost = util.reconcileValue(a.dockerHost, cmdLnInput.dockerHost, ``);
+      this.dockerPorts = util.reconcileValue(a.dockerPorts, cmdLnInput.dockerPorts, ``);
+      this.dockerCertPath = util.reconcileValue(a.dockerCertPath, cmdLnInput.dockerCertPath, ``);
+      this.applicationName = util.reconcileValue(a.applicationName, cmdLnInput.applicationName, ``);
+      this.dockerRegistryId = util.reconcileValue(a.dockerRegistryId, cmdLnInput.dockerRegistryId, ``);
+      this.dockerRegistryEmail = util.reconcileValue(a.dockerRegistryEmail, cmdLnInput.dockerRegistryEmail, ``);
+      this.dockerRegistryPassword = util.reconcileValue(a.dockerRegistryPassword, cmdLnInput.dockerRegistryPassword, ``);
    }.bind(this));
 }
 
 // Based on the users answers compose all the required generators.
 function configGenerators() {
-   if (templateData.answers.type === 'asp') {
-      this.composeWith('vsts:asp', { args: [templateData.answers.applicationName, templateData.answers.installDep] });
-   } else if (templateData.answers.type === 'node') {
-      this.composeWith('vsts:node', { args: [templateData.answers.applicationName, templateData.answers.installDep, templateData.answers.target, templateData.answers.dockerHost ? templateData.answers.dockerHost : ""] });
+   if (this.type === 'asp') {
+      this.composeWith('vsts:asp', { args: [this.applicationName, this.installDep] });
+   } else if (this.type === 'node') {
+      this.composeWith('vsts:node', { args: [this.applicationName, this.installDep, this.target, this.dockerHost ? this.dockerHost : ""] });
    } else {
-      this.composeWith('vsts:java', { args: [templateData.answers.applicationName, templateData.answers.groupId, templateData.answers.installDep] });
+      this.composeWith('vsts:java', { args: [this.applicationName, this.groupId, this.installDep] });
    }
 
-   if (templateData.answers.target === 'docker') {
-      this.composeWith('vsts:vsts', { args: [templateData.answers.type, templateData.answers.applicationName, templateData.answers.vsts, templateData.answers.pat, templateData.answers.azureSub, templateData.answers.queue, templateData.answers.target, templateData.answers.dockerHost, templateData.answers.dockerCertPath, templateData.answers.dockerRegistryId, templateData.answers.dockerRegistryPassword, templateData.answers.dockerRegistryEmail] });
+   if (this.target === 'docker') {
+      this.composeWith('vsts:vsts', { args: [this.type, this.applicationName, this.instance, this.pat, this.azureSub, this.queue, this.target, this.dockerHost, this.dockerCertPath, this.dockerRegistryId, this.dockerRegistryPassword, this.dockerRegistryEmail] });
    } else {
-      this.composeWith('vsts:vsts', { args: [templateData.answers.type, templateData.answers.applicationName, templateData.answers.vsts, templateData.answers.pat, templateData.answers.azureSub, templateData.answers.queue, templateData.answers.target] });
+      this.composeWith('vsts:vsts', { args: [this.type, this.applicationName, this.instance, this.pat, this.azureSub, this.queue, this.target] });
    }
 }
 
