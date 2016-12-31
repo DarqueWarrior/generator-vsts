@@ -137,11 +137,12 @@ function input() {
          return cmdLnInput.target === undefined;
       }
    }, {
-      type: `input`,
+      type: `list`,
       name: `azureSub`,
       store: true,
       message: `What is your Azure subscription name?`,
       validate: util.validateAzureSub,
+      choices: util.getAzureSubs,
       when: function (a) {
          return (a.target === `paas` || cmdLnInput.target === `paas`) && cmdLnInput.azureSub === undefined;
       }

@@ -91,6 +91,37 @@ function getFullURL(instance) {
    return `https://${instance}.visualstudio.com/`;
 }
 
+function getAzureSubs(answers) {
+   "use strict";
+
+   var token = encodePat(answers.pat);
+
+   var options = {
+      method: 'GET',
+      headers: { 'cache-control': 'no-cache', 'content-type': 'application/json', 'authorization': `Basic ${token}` },
+      url: `${getFullURL(answers.instance)}/_apis/distributedtask/serviceendpointproxy/azurermsubscriptions`
+   };
+
+   return new Promise(function (resolve, reject) {
+      request(options, function (e, response, body) {
+         if (e) {
+            reject(e);
+            return;
+         }
+
+         var obj = JSON.parse(body);
+
+         var result = [];
+         
+         obj.value.forEach((sub) => {
+            result.push({ name: sub.displayName });
+         });
+
+         resolve(result);
+      });
+   });
+}
+
 function getPools(answers) {
    "use strict";
 
@@ -123,6 +154,7 @@ module.exports = {
    // Exports the portions of the file we want to share with files that require
    // it.
    getPools: getPools,
+   getAzureSubs: getAzureSubs,
    validateVSTS: validateVSTS,
    reconcileValue: reconcileValue,
    validateAzureSub: validateAzureSub,
