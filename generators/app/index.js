@@ -38,6 +38,7 @@ function construct() {
 function init() {
    this.log(yosay('Welcome to DevOps powered by Team Services'));
    cmdLnInput = {
+      gen: this,
       pat: this.pat,
       type: this.type,
       instance: this.instance,
@@ -62,7 +63,7 @@ function input() {
       type: 'input',
       name: 'instance',
       store: true,
-      message: "What's your Team Services account name ({account}.visualstudio.com)?",
+      message: "What's your Team Services account name\n  ({account}.visualstudio.com)?",
       validate: util.validateVSTS,
       when: function () {
          return cmdLnInput.vsts === undefined;
@@ -84,6 +85,7 @@ function input() {
       default: `Hosted`,
       choices: util.getPools,
       when: function () {
+         cmdLnInput.gen.log(`  Getting Agent Queues...`);
          return cmdLnInput.queue === undefined;
       }
    }, {
@@ -93,11 +95,11 @@ function input() {
       message: 'What type of application do you want to create?',
       choices: [
          {
-            name: 'ASP.NET',
+            name: '.NET Core',
             value: 'asp'
          },
          {
-            name: 'NodeJS',
+            name: 'Node.js',
             value: 'node'
          },
          {
@@ -112,7 +114,7 @@ function input() {
       type: 'input',
       name: 'applicationName',
       store: true,
-      message: "What's the name of your ASP.NET application?",
+      message: "What's the name of your application?",
       validate: util.validateApplicationName,
       when: function () {
          return cmdLnInput.applicationName === undefined;
@@ -144,6 +146,7 @@ function input() {
       validate: util.validateAzureSub,
       choices: util.getAzureSubs,
       when: function (a) {
+         cmdLnInput.gen.log(`  Getting Azure subscriptions...`);
          return (a.target === `paas` || cmdLnInput.target === `paas`) && cmdLnInput.azureSub === undefined;
       }
    }, {
