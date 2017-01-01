@@ -95,6 +95,10 @@ function input() {
       message: 'What type of application do you want to create?',
       choices: [
          {
+               name: 'ASP.NET.Core.MVC',
+               value: 'aspcoremvc'
+         },
+         {
             name: '.NET Core',
             value: 'asp'
          },
@@ -257,6 +261,8 @@ function input() {
 function configGenerators() {
    if (this.type === 'asp') {
       this.composeWith('vsts:asp', { args: [this.applicationName, this.installDep] });
+   } else if (this.type === 'aspcoremvc') {
+      this.composeWith('vsts:aspcoremvc', { args: [this.applicationName, this.installDep] });
    } else if (this.type === 'node') {
       this.composeWith('vsts:node', { args: [this.applicationName, this.installDep, this.target, this.dockerHost ? this.dockerHost : ""] });
    } else {
