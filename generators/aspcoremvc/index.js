@@ -32,8 +32,8 @@ function writeFiles() {
    this.fs.copyTpl(`${src}/bower.json`, `${root}/bower.json`, tokens);
 
       // Project files
-   this.copy(`${src}/App.csproj`, `${root}/App.csproj`);
-   this.copy(`${src}/App.xproj`, `${root}/App.xproj`);
+   this.copy(`${src}/App.csproj`, `${root}/App.csproj`);   
+   this.fs.copyTpl(`${src}/App.xproj`, `${root}/App.xproj`, tokens);
    this.fs.copyTpl(`${src}/project.json`, `${root}/project.json`, tokens);
    this.copy(`${src}/project.lock.json`, `${root}/project.lock.json`);
 
