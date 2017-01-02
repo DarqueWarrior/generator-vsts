@@ -23,12 +23,13 @@ function writeFiles() {
    this.copy(`${src}/README.md`, `${root}/README.md`);
    this.copy(`${src}/gitignore`, `${root}/.gitignore`);
    this.copy(`${src}/global.json`, `${root}/global.json`);   
-   this.fs.copyTpl(`${src}/.bowerrc`, `${root}/.bowerrc`, tokens);
-   this.fs.copyTpl(`${src}/bower.json`, `${root}/bower.json`, tokens);
+
 
    // Web App project
    src = `${this.sourceRoot()}/src/app`;
    root = `${this.applicationName}/src/${this.applicationName}`;
+   this.fs.copyTpl(`${src}/.bowerrc`, `${root}/.bowerrc`, tokens);
+   this.fs.copyTpl(`${src}/bower.json`, `${root}/bower.json`, tokens);
 
       // Project files
    this.copy(`${src}/App.csproj`, `${root}/App.csproj`);

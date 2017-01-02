@@ -1,5 +1,5 @@
 {
-  "name": "asp.net",
+  "name": "<%= name_lowercase %>",
   "private": true,
   "dependencies": {
     "bootstrap": "3.3.6",
