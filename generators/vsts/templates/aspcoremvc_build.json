@@ -20,7 +20,7 @@
          "inputs": {
             "filename": "bower",
             "arguments": "install",
-            "workingFolder": "",
+            "workingFolder": "$(Build.SourcesDirectory)/src/{{Project}}",
             "failOnStandardError": "false"
          }
       },
