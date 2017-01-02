@@ -151,7 +151,7 @@ function input() {
       choices: util.getAzureSubs,
       when: function (a) {
          cmdLnInput.gen.log(`  Getting Azure subscriptions...`);
-         return (a.target === `paas` || cmdLnInput.target === `paas`) && cmdLnInput.azureSub === undefined;
+         return cmdLnInput.azureSub === undefined;
       }
    }, {
       type: `input`,
@@ -199,15 +199,6 @@ function input() {
       validate: util.validateDockerHubEmail,
       when: function (answers) {
          return (answers.target === `docker` || cmdLnInput.target === `docker`) && cmdLnInput.dockerRegistryEmail === undefined;
-      }
-   }, {
-      type: `input`,
-      name: `dockerPorts`,
-      default: util.getDefaultPortMapping,
-      message: `What should the port mapping be?`,
-      validate: util.validatePortMapping,
-      when: function (answers) {
-         return (answers.target === `docker` || cmdLnInput.target === `docker`) && cmdLnInput.dockerPorts === undefined;
       }
    }, {
       type: `input`,
