@@ -23,6 +23,7 @@ function writeFiles() {
    this.copy(`${src}/README.md`, `${root}/README.md`);
    this.copy(`${src}/gitignore`, `${root}/.gitignore`);
    this.copy(`${src}/global.json`, `${root}/global.json`);   
+   this.copy(`${src}/latest_dotnet.ps1`, `${root}/latest_dotnet.ps1`);   
 
 
    // Web App project

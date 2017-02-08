@@ -6,6 +6,26 @@
       "id": "{{QueueId}}"
    },
    "build": [
+          {
+      "enabled": true,
+      "continueOnError": false,
+      "alwaysRun": false,
+      "displayName": "PowerShell Script",
+      "timeoutInMinutes": 0,
+      "task": {
+        "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+        "versionSpec": "*",
+        "definitionType": "task"
+      },
+      "inputs": {
+        "scriptType": "filePath",
+        "scriptName": "latest_dotnet.ps1",
+        "arguments": "-BuildConfiguration $(BuildConfiguration) - StagingDirectory $(Build.StagingDirectory)",
+        "inlineScript": "# You can write your powershell scripts inline here. \n# You can also pass predefined and custom variables to this scripts using arguments\n\n Write-Host \"Hello World\"",
+        "workingFolder": "",
+        "failOnStandardError": "true"
+      }
+    },
       {
          "enabled": true,
          "continueOnError": false,
