@@ -35,6 +35,13 @@ function configureVSTS() {
       } else {
          build = this.templatePath('asp_build.json');
       }
+   } else if (this.type === 'aspcoremvc') {
+      if (this.target === 'docker') {
+         build = this.templatePath('asp_docker_build.json');
+         release = this.templatePath('asp_release_docker.json');
+      } else {
+         build = this.templatePath('aspcoremvc_build.json');
+      }
    } else if (this.type === 'node') {
       if (this.target === 'docker') {
          build = this.templatePath('node_docker_build.json');
@@ -111,6 +118,9 @@ function commitCode() {
 
 function writeFiles() {
    if (this.type === 'asp') {
+      this.copy(this.sourceRoot() + '/asp_arm.json', this.applicationName + '/templates/website.json');
+      this.copy(this.sourceRoot() + '/arm.parameters.json', this.applicationName + '/templates/website.parameters.json');
+   } else if (this.type === 'aspcoremvc') {
       this.copy(this.sourceRoot() + '/asp_arm.json', this.applicationName + '/templates/website.json');
       this.copy(this.sourceRoot() + '/arm.parameters.json', this.applicationName + '/templates/website.parameters.json');
    } else if (this.type === 'node') {
